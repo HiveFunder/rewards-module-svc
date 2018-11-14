@@ -6,7 +6,7 @@ const db = require('../database/index.js');
 
 const app = express();
 const port = 3003;
-const host = '0.0.0.0';
+const host = 'localhost' || '0.0.0.0';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -71,6 +71,14 @@ app.get('/api/:projectId/currency', (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+app.post('/api/:projectId/rewards', (req, res) => {
+  res.end();
+});
+
+app.put('/api/:projectId/rewards', (req, res) => {
+  res.end();
 });
 
 app.listen(port, host);

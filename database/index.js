@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-const db = new Sequelize('rewards', 'root', 'test', {
+const db = new Sequelize('rewards', 'root', '', {
   dialect: 'mysql',
-  host: '172.17.0.2',
+  host: 'localhost',
   operatorsAliases: false,
 });
 
@@ -25,8 +25,15 @@ const Project = db.define('Project', {
   location: Sequelize.STRING,
 });
 
+const Pledge = db.define('Pledge', {
+  pledged: Sequelize.INTEGER,
+  username: Sequelize.INTEGER,
+});
+
 Reward.sync();
 Project.sync();
+Pledge.sync();
 
 exports.Reward = Reward;
 exports.Project = Project;
+exports.Pledge = Pledge;
