@@ -27,7 +27,7 @@ const Project = db.define('Project', {
 
 const Pledge = db.define('Pledge', {
   pledged: Sequelize.INTEGER,
-  username: Sequelize.INTEGER,
+  username: Sequelize.STRING,
 });
 
 Reward.sync();
