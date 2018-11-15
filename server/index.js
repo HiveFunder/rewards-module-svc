@@ -118,12 +118,13 @@ app.put('/api/:projectId/:name/rewards', (req, res) => {
     });
 });
 
-app.delete('/api/:projectId/rewards', (req, res) => {
-  const { projectId } = req.params;
+app.delete('/api/:projectId/:name/rewards', (req, res) => {
+  const { projectId, name } = req.params;
 
   db.Reward.destroy({
     where: {
       projectId,
+      name,
     },
   })
     .then(() => {
