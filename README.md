@@ -12,8 +12,9 @@
 ## Table of Contents
 
 1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
+2. [Requirements](#requirements)
+3. [Development](#development)
+4. [CRUD](#crud)
 
 ## Usage
 
@@ -48,4 +49,12 @@ From within the root directory:
 npm install -g webpack
 npm install
 ```
+## CRUD
 
+| Request Type   | Route                          |
+|----------------|--------------------------------|
+| GET            | `api/:projectId/rewards`       |
+| POST           | `api/:projectId/pledge`        |
+| POST           | `api/:projectId/reward`        |
+| PUT            | `api/:projectId/:name/rewards` |
+| DELETE         | `api/:projectId/:name/rewards` | 
