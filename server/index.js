@@ -86,10 +86,24 @@ app.post('/api/:projectId/rewards', (req, res) => {
     });
 });
 
-app.post('/api/:projectId/pledge', (req, res) => {
-  db.Pledge.create(req.body)
+app.post('/api/:projectId/:name/pledge', (req, res) => {
+  const { projectId, name } = req.params;
+
+  db.Reward.findAll({
+    where: {
+      projectId,
+      name,
+    },
+  })
+    .then(reward => {
+      if (reward.backers < reward.limitCount) {
+        return reward.increment({
+          backers: 1, 
+        }),
+      },
+    })
     .then(() => {
-      res.send('thanks for the pledge');
+      res.sendStatus(201).end();
     })
     .catch((err) => {
       res.send(err);
