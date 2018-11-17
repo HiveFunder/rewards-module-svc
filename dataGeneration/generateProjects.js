@@ -7,6 +7,8 @@ const records = 10 * 1000000;
 const stream = fs.createWriteStream('projects.csv');
 let i = 1;
 
+stream.write('location\n');
+
 const write = () => {
   while (i <= records) {
     const project = {};

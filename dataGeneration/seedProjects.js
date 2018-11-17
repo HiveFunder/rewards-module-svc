@@ -1,0 +1,24 @@
+const { Client } = require('pg');
+const path = require('path');
+
+const client = new Client({
+  user: 'FILL_ME_IN',
+  host: 'FILL_ME_IN',
+  database: 'rewards',
+  password: 'admin',
+  port: 5432,
+});
+
+const projects = path.join(__dirname, '..', 'projects.csv');
+
+async function connection() {
+  await client.connect();
+  // await client.query('DROP DATABASE rewards;');
+  // await client.query('CREATE DATABASE rewards;');
+  // await client.query('\connect rewards;');
+  await client.query('CREATE TABLE IF NOT EXISTS projects (id SERIAL PRIMARY KEY, location TEXT);');
+  await client.query(`COPY projects (location) from '${projects}' CSV HEADER;`);
+  await client.end();
+}
+
+connection();
