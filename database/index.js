@@ -25,13 +25,6 @@ const Project = db.define('Project', {
   location: Sequelize.STRING,
 });
 
-// const Pledge = db.define('Pledge', {
-//   pledged: Sequelize.INTEGER,
-//   username: Sequelize.STRING,
-// });
-
-// Pledge.belongsTo(Reward);
-
 Reward.sync();
 Project.sync();
 
