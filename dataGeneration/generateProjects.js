@@ -7,7 +7,7 @@ const records = 10 * 1000000;
 const stream = fs.createWriteStream('projects.csv');
 let i = 1;
 
-stream.write('location\n');
+stream.write('id,location\n');
 
 const write = () => {
   while (i <= records) {
@@ -19,7 +19,7 @@ const write = () => {
     } else {
       project.location = 'US';
     }
-    stream.write(`${project.location}\n`);
+    stream.write(`${i},${project.location}\n`);
     if (i % 100000 === 0) {
       console.log(`${i} entries logged`);
     }
