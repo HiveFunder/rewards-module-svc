@@ -95,13 +95,6 @@ app.post('/api/:projectId/:name/pledge', (req, res) => {
       name,
     },
   })
-    .then(reward => {
-      if (reward.backers < reward.limitCount) {
-        return reward.increment({
-          backers: 1, 
-        }),
-      },
-    })
     .then(() => {
       res.sendStatus(201).end();
     })
