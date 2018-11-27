@@ -97,8 +97,11 @@ app.post('/api/:projectId/:name/pledge', (req, res) => {
 app.put('/api/:projectId/:name/rewards', (req, res) => {
   const { projectId, name } = req.params;
   const { pledgeAmount, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers } = req.body;
+  const query = `UPDATE rewards SET (projectId, pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, 
+  estDeliv, shipsTo, backers) = (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) where projectid = ? and name = ?;`;
+  const replace = [projectId, pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers, projectId, name];
 
-  db.db.query('UPDATE rewards SET (projectId, pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers) = (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) where projectid = ? and name = ?', { raw: true, replacements: [projectId, pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers, projectId, name], model: db.Reward })
+  db.db.query(query, { raw: true, replacements: replace, model: db.Reward })
     .then(() => {
       res.sendStatus(204).end();
     })
