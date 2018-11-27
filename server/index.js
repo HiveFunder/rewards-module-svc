@@ -5,7 +5,7 @@ const cors = require('cors');
 const db = require('../database/index.js');
 
 const app = express();
-const port = 3003;
+const port = process.env.PORT || 3003;
 const host = 'localhost' || '0.0.0.0';
 
 app.use(cors());
