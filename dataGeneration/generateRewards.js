@@ -54,7 +54,7 @@ const write = () => {
 	      backers,
 	    };
 
-	    if (i) {
+	    if (i % 10000 === 0) {
 	      console.clear();
 	      console.log(`${i} entries logged`);
 	    }

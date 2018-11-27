@@ -1,7 +1,7 @@
+require('newrelic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const path = require('path');
 const db = require('../database/index.js');
 
 const app = express();
@@ -15,17 +15,10 @@ app.use('/:projectId', express.static('public'));
 app.get('/api/:projectId/rewards', (req, res) => {
   const { projectId } = req.params;
 
-  db.Reward.findAll({
-    where: {
-      projectId,
-    },
-    order: [
-      ['pledgeAmount', 'ASC'],
-    ],
-  })
+  db.db.query('SELECT * FROM rewards where projectid = ?',
+    { raw: true, replacements: [projectId], model: db.Reward, order: ['pledgeAmount', 'ASC'] })
     .then((rewards) => {
-      const results = rewards.map(reward => (reward.dataValues));
-      res.send(results);
+      res.send(rewards);
     })
     .catch((err) => {
       console.log(err);
@@ -35,11 +28,8 @@ app.get('/api/:projectId/rewards', (req, res) => {
 app.get('/api/:projectId/currency', (req, res) => {
   const { projectId } = req.params;
 
-  db.Project.findAll({
-    where: {
-      id: projectId,
-    },
-  })
+  db.db.query('SELECT * FROM projects where id = ?',
+    { raw: true, replacements: [projectId], model: db.Project })
     .then((project) => {
       const currencyMap = {
         CA: 'C$',
@@ -65,7 +55,7 @@ app.get('/api/:projectId/currency', (req, res) => {
         MX: 'Mex$',
         JP: '¥',
       };
-      const result = currencyMap[project[0].dataValues.location];
+      const result = currencyMap[project[0].location];
       res.send(result);
     })
     .catch((err) => {
@@ -75,9 +65,9 @@ app.get('/api/:projectId/currency', (req, res) => {
 
 app.post('/api/:projectId/rewards', (req, res) => {
   const { projectId } = req.params;
-  req.body.projectId = projectId;
+  const { pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers } = req.body;
 
-  db.Reward.create(req.body)
+  db.db.query('INSERT INTO rewards (projectId, pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', { raw: true, replacements: [projectId, pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers], model: db.Reward })
     .then(() => {
       res.send('posted new reward');
     })
@@ -89,12 +79,13 @@ app.post('/api/:projectId/rewards', (req, res) => {
 app.post('/api/:projectId/:name/pledge', (req, res) => {
   const { projectId, name } = req.params;
 
-  db.Reward.findAll({
-    where: {
-      projectId,
-      name,
-    },
-  })
+  db.db.query('SELECT * FROM rewards where projectid = ? and name = ?',
+    { raw: true, replacements: [projectId, name], model: db.Reward })
+    .then((reward) => {
+      if (reward[0].backers < parseInt(reward[0].limitcount) || reward[0].limitcount === null) {
+        db.db.query('UPDATE rewards SET backers = backers + 1 where projectid = ? and name = ?', { raw: true, replacements: [projectId, name], model: db.Reward });
+      }
+    })
     .then(() => {
       res.sendStatus(201).end();
     })
@@ -105,20 +96,14 @@ app.post('/api/:projectId/:name/pledge', (req, res) => {
 
 app.put('/api/:projectId/:name/rewards', (req, res) => {
   const { projectId, name } = req.params;
-  req.body.projectId = projectId;
+  const { pledgeAmount, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers } = req.body;
+  const query = `UPDATE rewards SET (projectId, pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, 
+  estDeliv, shipsTo, backers) = (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) where projectid = ? and name = ?;`;
+  const replace = [projectId, pledgeAmount, name, description, item1, item2, item3, isLimited, limitCount, estDeliv, shipsTo, backers, projectId, name];
 
-  db.Reward.update(req.body, { where: { projectId, name } })
-    .then(() => db.Reward.findAll({
-      where: {
-        projectId,
-      },
-      order: [
-        ['pledgeAmount', 'ASC'],
-      ],
-    }))
-    .then((rewards) => {
-      const results = rewards.map(reward => (reward.dataValues));
-      res.send(results);
+  db.db.query(query, { raw: true, replacements: replace, model: db.Reward })
+    .then(() => {
+      res.sendStatus(204).end();
     })
     .catch((err) => {
       res.send(err);
@@ -128,14 +113,9 @@ app.put('/api/:projectId/:name/rewards', (req, res) => {
 app.delete('/api/:projectId/:name/rewards', (req, res) => {
   const { projectId, name } = req.params;
 
-  db.Reward.destroy({
-    where: {
-      projectId,
-      name,
-    },
-  })
+  db.db.query('DELETE FROM rewards where projectid = ? and name = ?', { raw: true, replacements: [projectId, name] })
     .then(() => {
-      res.send('deleted');
+      res.sendStatus(204).end();
     })
     .catch((err) => {
       res.send(err);
