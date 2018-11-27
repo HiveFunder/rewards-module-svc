@@ -28,7 +28,7 @@ class App extends React.Component {
     let projectId = window.location.pathname;
     projectId = Number(projectId.slice(1, -1)) || 1;
     // const projectId = '/10';
-    axios.get(`http://54.186.89.129/api/${projectId}/rewards`)
+    axios.get(`/api/${projectId}/rewards`)
       .then((res) => {
         this.setState({
           projectRewards: res.data,

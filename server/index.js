@@ -5,7 +5,7 @@ const cors = require('cors');
 const db = require('../database/index.js');
 
 const app = express();
-const port = 8080;
+const port = 80;
 const host = 'localhost' || '0.0.0.0';
 
 app.use(cors());
