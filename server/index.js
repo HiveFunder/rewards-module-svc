@@ -6,7 +6,7 @@ const db = require('../database/index.js');
 
 const app = express();
 const port = 80;
-const host = 'localhost' || '0.0.0.0';
+// const host = 'localhost' || '0.0.0.0';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -122,5 +122,4 @@ app.delete('/api/:projectId/:name/rewards', (req, res) => {
     });
 });
 
-app.listen(port, host);
-console.log(`Server is listening at port ${port}`);
+app.listen(port, () => console.log(`Server is listening at port ${port}`));
