@@ -6,7 +6,7 @@ const Sequelize = require('sequelize');
 //   operatorsAliases: false,
 // });
 
-const db = new Sequelize('postgres://localhost:5432/rewards');
+const db = new Sequelize('postgres://postgres:lol@172.31.35.43:5432/rewards');
 
 const Reward = db.define('Reward', {
   idTier: Sequelize.STRING,
