@@ -16,7 +16,7 @@ app.get('/api/:projectId/rewards', (req, res) => {
   const { projectId } = req.params;
 
   db.db.query('SELECT * FROM rewards where projectid = ?',
-    { raw: true, replacements: [projectId], model: db.Reward, order: ['pledgeAmount', 'ASC'] })
+    { raw: true, replacements: [projectId], model: db.Reward, order: ['pledgeamount', 'ASC'] })
     .then((rewards) => {
       res.send(rewards);
     })

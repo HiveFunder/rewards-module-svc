@@ -17,8 +17,8 @@ async function connection() {
   // await client.query('CREATE DATABASE rewards;');
   // await client.query('\connect rewards;');
   await client.query('DROP TABLE IF EXISTS projects;');
-  await client.query('CREATE TABLE IF NOT EXISTS projects (id INT PRIMARY KEY, location TEXT);');
-  await client.query(`COPY projects (id, location) from '${projects}' CSV HEADER;`);
+  await client.query('CREATE TABLE IF NOT EXISTS projects (id SERIAL PRIMARY KEY, location TEXT);');
+  await client.query(`COPY projects (location) from '${projects}' CSV HEADER;`);
   await client.end();
 }
 
