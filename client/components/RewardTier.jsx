@@ -27,7 +27,7 @@ class RewardTier extends React.Component {
 
   checkLimited() {
     const { reward } = this.props;
-    if (reward.isLimited) {
+    if (reward.islimited) {
       this.setState({
         limited: true,
       });
@@ -43,7 +43,7 @@ class RewardTier extends React.Component {
 
       return (
         <LimitedWrapper className="limitedWrapper">
-          {`Limited (${leftover} left of ${reward.limitCount})`}
+          {`Limited (${leftover} left of ${reward.limitcount})`}
         </LimitedWrapper>
       );
     }
@@ -77,7 +77,7 @@ class RewardTier extends React.Component {
       <RewardWrapper>
         <DivWrapper id={`${reward.id}`} className="rewardTier">
           <TitleWrapper className="pledgeAmount">
-            {`Pledge ${projectCurrency} ${reward.pledgeAmount} or more`}
+            {`Pledge ${projectCurrency} ${reward.pledgeamount} or more`}
           </TitleWrapper>
           <RewardName className="rewardName">{reward.name}</RewardName>
           <RewardDesc className="rewardDesc">{reward.description}</RewardDesc>
@@ -92,11 +92,11 @@ class RewardTier extends React.Component {
           <FlexWrapper>
             <div className="estDeliv">
               <GenericWrapper>ESTIMATED DELIVERY</GenericWrapper>
-              <ContentWrapper>{reward.estDeliv}</ContentWrapper>
+              <ContentWrapper>{reward.estdeliv}</ContentWrapper>
             </div>
             <ShipsWrapper className="shipsTo">
               <GenericWrapper>SHIPS TO</GenericWrapper>
-              <ContentWrapper>{reward.shipsTo}</ContentWrapper>
+              <ContentWrapper>{reward.shipsto}</ContentWrapper>
             </ShipsWrapper>
           </FlexWrapper>
           {this.renderLimited()}

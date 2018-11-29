@@ -7,7 +7,7 @@ const MiniPledgeForm = ({ reward, projectCurrency }) => (
       <LabelWrapper>Pledge amount</LabelWrapper>
       <div>
         <CurrencyWrapper htmlFor={`${reward.id}pledgeForm`} className="currencyWrapper">{projectCurrency}</CurrencyWrapper>
-        <InputWrapper type="text" id={`${reward.id}pledgeForm`} defaultValue={`${reward.pledgeAmount}`} min={`${reward.pledgeAmount}`} />
+        <InputWrapper type="text" id={`${reward.id}pledgeForm`} defaultValue={`${reward.pledgeamount}`} min={`${reward.pledgeamount}`} />
       </div>
       <div>
         <Continue className="continueButton">Continue</Continue>
