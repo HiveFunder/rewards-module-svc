@@ -18,6 +18,7 @@ app.get('/loaderio-', (req, res) => {
     if (err) throw err;
     res.sendFile(__dirname + '.txt', err => {
       if (err) throw err;
+    });
   });
 });
 
