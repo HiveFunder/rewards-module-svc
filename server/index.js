@@ -2,8 +2,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const db = require('../database/index.js');
 const fs = require('fs');
+const path = require('path');
+const db = require('../database/index.js');
 
 const app = express();
 const port = 80;
@@ -16,7 +17,7 @@ app.use('/:projectId', express.static('public'));
 app.get('/loaderio-', (req, res) => {
   fs.writeFile('.txt', '', (err) => {
     if (err) throw err;
-    res.sendFile(__dirname + '.txt', err => {
+    res.sendFile(path.join(__dirname, '..', '.txt'), err => {
       if (err) throw err;
     });
   });
