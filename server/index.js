@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('../database/index.js');
+const fs = require('fs');
 
 const app = express();
 const port = 80;
@@ -13,8 +14,12 @@ app.use(bodyParser.json());
 app.use('/:projectId', express.static('public'));
 
 app.get('/loaderio-', (req, res) => {
-  res.end();
-}
+  fs.writeFile('.txt', '', (err) => {
+    if (err) throw err;
+    res.sendFile(__dirname + '.txt', err => {
+      if (err) throw err;
+  });
+});
 
 app.get('/api/:projectId/rewards', (req, res) => {
   const { projectId } = req.params;
