@@ -12,6 +12,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/:projectId', express.static('public'));
 
+app.get('/loaderio-', (req, res) => {
+  res.end();
+}
+
 app.get('/api/:projectId/rewards', (req, res) => {
   const { projectId } = req.params;
 
