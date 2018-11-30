@@ -12,7 +12,31 @@ const port = 80;
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/:projectId', express.static('public'));
+
+const currencyMap = {
+  CA: 'C$',
+  UK: '£',
+  US: 'US$',
+  AU: 'A$',
+  NZ: 'NZ$',
+  NL: '€',
+  DK: 'kr.',
+  IE: '€',
+  NO: 'kr',
+  SE: 'kr',
+  DE: '€',
+  FR: '€',
+  ES: '€',
+  IT: '€',
+  AT: '€',
+  BE: '€',
+  CH: 'Fr.',
+  LU: '€',
+  HK: 'HK$',
+  SG: 'S$',
+  MX: 'Mex$',
+  JP: '¥',
+};
 
 app.get('/loaderio-', (req, res) => {
   fs.writeFile('.txt', '', (err) => {
@@ -23,11 +47,18 @@ app.get('/loaderio-', (req, res) => {
   });
 });
 
+app.use('/:projectId', express.static('public'));
+
 app.get('/api/:projectId/rewards', (req, res) => {
   const { projectId } = req.params;
 
-  db.db.query('SELECT * FROM rewards where projectid = ?',
+  db.db.query('select * from rewards join projects on (rewards.projectid = projects.id) where projectid = ?;',
     { raw: true, replacements: [projectId], model: db.Reward, order: ['pledgeamount', 'ASC'] })
+    .then((rewards) => {
+      rewards.map((entry) => {
+        entry.location = currencyMap[entry.location];
+      });
+    })
     .then((rewards) => {
       res.send(rewards);
     })
@@ -36,43 +67,19 @@ app.get('/api/:projectId/rewards', (req, res) => {
     });
 });
 
-app.get('/api/:projectId/currency', (req, res) => {
-  const { projectId } = req.params;
+// app.get('/api/:projectId/currency', (req, res) => {
+//   const { projectId } = req.params;
 
-  db.db.query('SELECT * FROM projects where id = ?',
-    { raw: true, replacements: [projectId], model: db.Project })
-    .then((project) => {
-      const currencyMap = {
-        CA: 'C$',
-        UK: '£',
-        US: 'US$',
-        AU: 'A$',
-        NZ: 'NZ$',
-        NL: '€',
-        DK: 'kr.',
-        IE: '€',
-        NO: 'kr',
-        SE: 'kr',
-        DE: '€',
-        FR: '€',
-        ES: '€',
-        IT: '€',
-        AT: '€',
-        BE: '€',
-        CH: 'Fr.',
-        LU: '€',
-        HK: 'HK$',
-        SG: 'S$',
-        MX: 'Mex$',
-        JP: '¥',
-      };
-      const result = currencyMap[project[0].location];
-      res.send(result);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+//   db.db.query('SELECT * FROM projects where id = ?',
+//     { raw: true, replacements: [projectId], model: db.Project })
+//     .then((project) => {
+//       const result = currencyMap[project[0].location];
+//       res.send(result);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
 
 app.post('/api/:projectId/rewards', (req, res) => {
   const { projectId } = req.params;

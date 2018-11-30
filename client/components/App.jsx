@@ -33,6 +33,7 @@ class App extends React.Component {
         this.setState({
           projectRewards: res.data,
           currentProject: projectId,
+          projectCurrency: res.data.location,
         });
       })
       .catch((err) => {
@@ -40,20 +41,20 @@ class App extends React.Component {
       });
   }
 
-  fetchCurrency() {
-    let projectId = window.location.pathname;
-    projectId = Number(projectId.slice(1, -1)) || 1;
-    // const projectId = '/10';
-    axios.get(`/api/${projectId}/currency`)
-      .then((res) => {
-        this.setState({
-          projectCurrency: res.data,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+  // fetchCurrency() {
+  //   let projectId = window.location.pathname;
+  //   projectId = Number(projectId.slice(1, -1)) || 1;
+  //   // const projectId = '/10';
+  //   axios.get(`/api/${projectId}/currency`)
+  //     .then((res) => {
+  //       this.setState({
+  //         projectCurrency: res.data,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
 
   renderLimited() {
     const { projectRewards } = this.state;
