@@ -1,4 +1,4 @@
-// require('newrelic');
+require('newrelic');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -38,10 +38,10 @@ const currencyMap = {
   JP: '¥',
 };
 
-app.get('/loaderio-', (req, res) => {
-  fs.writeFile('.txt', '', (err) => {
+app.get('/loaderio-47131234f756ac5c3d780c8d07cc7a4f', (req, res) => {
+  fs.writeFile('loaderio-47131234f756ac5c3d780c8d07cc7a4f.txt', 'loaderio-47131234f756ac5c3d780c8d07cc7a4f', (err) => {
     if (err) throw err;
-    res.sendFile(path.join(__dirname, '..', '.txt'), err => {
+    res.sendFile(path.join(__dirname, '..', '/loaderio-47131234f756ac5c3d780c8d07cc7a4f.txt'), err => {
       if (err) throw err;
     });
   });
@@ -55,8 +55,9 @@ app.get('/api/:projectId/rewards', (req, res) => {
   db.db.query('select * from rewards join projects on (rewards.projectid = projects.id) where projectid = ?;',
     { raw: true, replacements: [projectId], model: db.Reward, order: ['pledgeamount', 'ASC'] })
     .then((rewards) => {
-      rewards.map((entry) => {
-        entry.location = currencyMap[entry.location];
+      return rewards.map((entry) => { 
+       entry.location = currencyMap[entry.location];
+       return entry;
       });
     })
     .then((rewards) => {

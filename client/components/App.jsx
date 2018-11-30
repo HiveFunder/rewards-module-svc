@@ -15,25 +15,23 @@ class App extends React.Component {
     };
 
     this.fetchRewards = this.fetchRewards.bind(this);
-    this.fetchCurrency = this.fetchCurrency.bind(this);
     this.renderLimited = this.renderLimited.bind(this);
   }
 
   componentDidMount() {
     this.fetchRewards();
-    this.fetchCurrency();
   }
 
   fetchRewards() {
     let projectId = window.location.pathname;
     projectId = Number(projectId.slice(1, -1)) || 1;
     // const projectId = '/10';
-    axios.get(`/api/${projectId}/rewards`)
+    axios.get(`http://54.218.70.101/api/${projectId}/rewards`)
       .then((res) => {
         this.setState({
           projectRewards: res.data,
           currentProject: projectId,
-          projectCurrency: res.data.location,
+          projectCurrency: res.data[0].location,
         });
       })
       .catch((err) => {
@@ -61,7 +59,7 @@ class App extends React.Component {
     const { currentProject } = this.state;
     const { projectCurrency } = this.state;
     const limitedRewards = projectRewards.filter(reward => (
-      (reward.limitCount !== null) && (reward.limitCount === reward.backers)
+      (reward.limitcount !== null) && (reward.limitcount === reward.backers)
     ));
 
     if (limitedRewards.length) {
@@ -87,7 +85,7 @@ class App extends React.Component {
     const { projectCurrency } = this.state;
 
     projectRewards = projectRewards.filter(reward => (
-      (reward.limitCount === null || reward.limitCount !== reward.backers)
+      (reward.limitcount === null || reward.limitcount !== reward.backers)
     ));
 
     return (
@@ -98,7 +96,7 @@ class App extends React.Component {
         </StyledPledgeWidget>
         <div>
           {projectRewards.map(reward => (
-            <RewardTier key={`${currentProject}${reward.id}`} reward={reward} projectCurrency={projectCurrency} />
+            <RewardTier key={`${currentProject}${reward.pledgeamount}`} reward={reward} projectCurrency={projectCurrency} />
           ))}
         </div>
         {this.renderLimited()}

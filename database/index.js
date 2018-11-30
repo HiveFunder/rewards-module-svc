@@ -6,7 +6,7 @@ const Sequelize = require('sequelize');
 //   operatorsAliases: false,
 // });
 
-const db = new Sequelize('postgres://postgres@ec2-34-213-163-161.us-west-2.compute.amazonaws.com/rewards');
+const db = new Sequelize('postgres://postgres:lol@ec2-34-219-181-132.us-west-2.compute.amazonaws.com/rewards');
 
 const Reward = db.define('Reward', {
   idTier: Sequelize.STRING,
